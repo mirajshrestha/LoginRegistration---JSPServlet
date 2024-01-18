@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package servlets;
 
 import com.mysql.jdbc.Connection;
@@ -23,22 +19,25 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String email = request.getParameter("email");
         System.out.println(username);
         System.out.println(password);
+        System.out.println(email);
 
         try {
             Connection conn = (Connection) DBUtil.getConnection();
-            PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement("select * from users where username=?");
-            pstmt.setString(1, username);
+            PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement("select * from users where email=?");
+            pstmt.setString(1, email);
             ResultSet rs = (ResultSet) pstmt.executeQuery();
             if (rs.next()) {
-                response.sendRedirect("register.jsp?username=exists");
+                response.sendRedirect("register.jsp?email=exists");
             } else {
                 String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+                String query = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
                 PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(query);
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, hashedPassword);
+                preparedStatement.setString(3, email);
                 preparedStatement.executeUpdate();
                 response.sendRedirect("login.jsp");
             }
@@ -46,4 +45,5 @@ public class RegisterServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
 }

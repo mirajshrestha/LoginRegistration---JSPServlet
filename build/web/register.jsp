@@ -9,14 +9,15 @@
         <h2>Registration</h2>
         <form action="RegisterServlet" method="post" onsubmit="return validateForm()">
             <%
-                if (request.getParameter("username") != null) {
-                    if (request.getParameter("username").equals("exists")) {
-                        out.println("Username already exits");
+                if (request.getParameter("email") != null) {
+                    if (request.getParameter("email").equals("exists")) {
+                        out.println("Email already exits");
                     }
                 }
             %>
             <br>
             Username: <input type="text" name="username" id="username"><br>
+            Email: <input type="text" name="email" id="email"><br>
             Password: <input type="password" name="password" id="password"><br>
             Confirm Password: <input type="password" name="cpassword" id="cpass"><br>
             <input type="submit" value="Register">
@@ -27,8 +28,21 @@
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
             var cpass = document.getElementById("cpass").value;
+            var email = document.getElementById("email").value;
             if (username == "") {
                 alert("Please enter username");
+                return false;
+            }
+            if(email == ""){
+                alert("Please enter email");
+                return false;
+            }
+            if(email.indexOf('@')<=0){
+                alert("Invalid @ position");
+                return false;
+            }
+            if((email.charAt(email.length-4)!='.') && (email.charAt(email.length-3)!='.')){
+                alert("Invalid email sturcture");
                 return false;
             }
             if (password == "") {
@@ -47,6 +61,7 @@
                 alert("Password does not match the confirm password");
                 return false;
             }
+            
         }
     </script>
 </html>

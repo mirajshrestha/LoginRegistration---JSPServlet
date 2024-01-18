@@ -18,25 +18,28 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String enteredPassword = request.getParameter("password");
         try {
             Connection conn = (Connection) DBUtil.getConnection();
-            String query = "SELECT * FROM users WHERE username = ?";
+            String query = "SELECT * FROM users WHERE email = ?";
             PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(query);
-            preparedStatement.setString(1, username);
+            preparedStatement.setString(1, email);
             ResultSet resultSet = (ResultSet) preparedStatement.executeQuery();
             if (resultSet.next()) {
                 String hashedPasswordFromDatabase = resultSet.getString("password");
                 if (BCrypt.checkpw(enteredPassword, hashedPasswordFromDatabase)) {
+                    String username = resultSet.getString("username");
                     HttpSession session = request.getSession();
+                    session.setAttribute("email", email);
                     session.setAttribute("username", username);
+
                     response.sendRedirect("welcome.jsp");
                 } else {
                     response.setContentType("text/html");
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Incorrect username or password');");
+                    out.println("alert('Incorrect email or password');");
                     out.println("window.location.href='login.jsp';");
                     out.println("</script>");
                 }

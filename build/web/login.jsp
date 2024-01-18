@@ -14,17 +14,17 @@
     <body>
         <h2>Login</h2>
         <form action="LoginServlet" method="post" onsubmit="return validateForm()">
-            Username: <input type="text" name="username" id="username"><br>
+            Email: <input type="text" name="email" id="email"><br>
             Password: <input type="password" name="password" id="password"><br>
             <input type="submit" value="Login">
         </form>
     </body>
     <script type="text/javascript">
         function validateForm() {
-            var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
-            if (username == "") {
-                alert("Please enter username");
+            if (email == "") {
+                alert("Please enter email");
                 return false;
             }
             if (password == "") {
