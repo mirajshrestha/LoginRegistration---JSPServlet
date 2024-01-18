@@ -1,2 +1,2 @@
 # LoginRegistration---JSPServlet
-A simple login and registration application made using JSP and Servlet
+This is a simple login and registration application made using JSP and Servlet.
